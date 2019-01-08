@@ -1,0 +1,47 @@
+---
+#################################################
+#  Test playbook - does some work on variables  #
+#################################################
+
+- hosts: all
+  vars:
+    test1: "Hello World"
+  tasks:
+  - name: Set var isPower
+    set_fact:
+      isPower: "Y"
+    when: ansible_architecture.find("ppc") != -1
+
+  - name: Set var isPower 2
+    set_fact:
+      isPower: "N"
+    when: ansible_architecture.find("ppc") == -1
+
+  - debug:
+      msg: "VARIABLE isPower SET TO {{ isPower }}"
+    when: isPower is defined
+
+  - name: We are Power
+    debug:
+      msg: "We ARE Power"
+    when: isPower =="Y"
+
+  - name: We are NOT Power
+    debug:
+      msg: "We are NOT Power"
+    when: isPower !="Y"
+
+  - name: Ansible when variable contains string example
+    debug:
+      msg: "Equals"
+    when: test1.find("World") != -1
+
+  - name: testing on arch variable
+    debug:
+      msg: "Equals"
+    when: ansible_architecture.find("ppc") != -1
+
+  - name: what arch are we?
+    debug:
+      msg: "ansible_architecture is {{ ansible_architecture }} "
+    when: ansible_architecture is defined

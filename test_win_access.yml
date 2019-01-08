@@ -1,0 +1,23 @@
+---
+########################################################################
+# Simple ansible playbook that will show you the ID it's running under #
+# and whether it can allocate a file                                   #
+########################################################################
+
+- hosts: all
+  gather_facts: no
+  tasks:
+
+  - name: Test command
+    win_command: whoami
+    register: whoami_out
+
+  - debug: msg=whoami_out
+
+
+  - name: Create C:\cjktest directory
+    win_file:
+      path: C:\cjktest
+      state: directory
+    ignore_errors: yes
+    tags: basic_config
